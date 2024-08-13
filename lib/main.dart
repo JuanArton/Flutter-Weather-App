@@ -151,24 +151,6 @@ class _MyAppState extends State<MyAppState> {
             },
           )
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white30,
-        backgroundColor: const Color(0xFF7a4cb8),
-        elevation: 0,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
