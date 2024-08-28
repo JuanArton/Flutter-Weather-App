@@ -27,7 +27,7 @@ class ForecastCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${weather.temp.floor()}°',
+              '${weather.temp?.floor()}°',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
               textScaler: const TextScaler.linear(1.0),

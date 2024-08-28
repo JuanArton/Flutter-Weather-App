@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:weatherapp/domain/usecase/get_current_location.dart';
 
 import '../../common/state_enum.dart';
-import '../../domain/usecase/get_weather_forecast.dart';
 
 class LocationNotifier extends ChangeNotifier {
   final GetCurrentLocation getCurrentLocation;

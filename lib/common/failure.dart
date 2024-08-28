@@ -11,3 +11,7 @@ class ServerFailure extends Failure {
 class ConnectionFailure extends Failure {
   ConnectionFailure(super.message);
 }
+
+class DatabaseFailure extends Failure {
+  DatabaseFailure(super.message);
+}

@@ -1,17 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 
-class LocationHandler {
-  LocationHandler._privateConstructor();
+class GlobalSingleton {
+  GlobalSingleton._privateConstructor();
 
   // Static instance
-  static final LocationHandler _instance = LocationHandler._privateConstructor();
+  static final GlobalSingleton _instance = GlobalSingleton._privateConstructor();
 
   // Factory constructor to return the same instance
-  factory LocationHandler() {
+  factory GlobalSingleton() {
     return _instance;
   }
 
   Position? position;
+  Position? newPosition;
+  final glbKey = GlobalKey();
 
   Future<bool> handleLocationPermission() async {
     bool serviceEnabled;

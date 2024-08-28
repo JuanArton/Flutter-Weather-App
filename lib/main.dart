@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:weatherapp/common/constants.dart';
 import 'package:weatherapp/common/state_enum.dart';
 import 'package:weatherapp/injection.dart' as di;
-import 'package:weatherapp/presentation/pages/dashboardPage.dart';
-import 'package:weatherapp/presentation/pages/settingsPage.dart';
+import 'package:weatherapp/presentation/pages/dashboard_page.dart';
+import 'package:weatherapp/presentation/pages/new_location_page.dart';
+import 'package:weatherapp/presentation/pages/saved_location_page.dart';
 import 'package:weatherapp/presentation/provider/forecast_notifier.dart';
 import 'package:weatherapp/presentation/provider/location_notifier.dart';
+import 'package:weatherapp/presentation/provider/saved_location_notifier.dart';
 import 'package:weatherapp/presentation/provider/weather_notifier.dart';
-import 'package:weatherapp/presentation/util/location_handler.dart';
+import 'package:weatherapp/presentation/util/global_singleton.dart';
 
 void main() {
   di.init();
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => di.locator<LocationNotifier>(),
+          ),
+          ChangeNotifierProvider(
+              create: (_) => di.locator<SavedLocationNotifier>(),
           ),
         ],
         child: MaterialApp(
@@ -74,7 +79,7 @@ class _MyAppState extends State<MyAppState> {
 
   static final List<Widget> _pages = <Widget>[
     const DashboardPage(),
-    SettingsPage(),
+    const SavedLocationPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -90,7 +95,7 @@ class _MyAppState extends State<MyAppState> {
   }
 
   Future<void> _checkPermission() async {
-    LocationHandler locationHandler = LocationHandler();
+    GlobalSingleton locationHandler = GlobalSingleton();
     bool permission = await locationHandler.handleLocationPermission();
     setState(() {
       hasPermission = permission;
@@ -99,8 +104,8 @@ class _MyAppState extends State<MyAppState> {
     Future.microtask(() {
       final locationNotifier = Provider.of<LocationNotifier>(context, listen: false);
       locationNotifier.fetchCurrentLocation();
-    }
-    );
+    });
+    print('Position: Triggered again');
   }
 
   @override
@@ -111,45 +116,62 @@ class _MyAppState extends State<MyAppState> {
 
     return Scaffold(
       body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF0b0a26),
-                Color(0xFF333064),
-                Color(0xFF4b3793),
-                Color(0xFF7a4cb8)
-              ],
-              stops: [0.00, 0.25, 0.50, 1.0],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF0b0a26),
+              Color(0xFF333064),
+              Color(0xFF4b3793),
+              Color(0xFF7a4cb8),
+            ],
+            stops: [0.00, 0.25, 0.50, 1.0],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          child: Consumer<LocationNotifier>(
-            builder: (context, data, child) {
-              if (data.positionState == RequestState.Loading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (data.positionState == RequestState.Loaded) {
-                if (data.position != null) {
-                  LocationHandler().position = data.position;
+        ),
+        child: Consumer<LocationNotifier>(
+          builder: (context, data, child) {
+            if (data.positionState == RequestState.Loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (data.positionState == RequestState.Loaded) {
+              if (data.position != null) {
+                GlobalSingleton().position = data.position;
 
-                  return _pages[_selectedIndex];
-                } else {
-                  return const Center(
-                    key: Key('error_message'),
-                    child: Text("can't fetch location"),
-                  );
-                }
-
+                return _pages[_selectedIndex];
               } else {
-                return Center(
-                  key: const Key('error_message'),
-                  child: Text(data.message),
+                return const Center(
+                  key: Key('error_message'),
+                  child: Text("Can't fetch location"),
                 );
               }
-            },
-          )
+            } else {
+              return Center(
+                key: const Key('error_message'),
+                child: Text(data.message),
+              );
+            }
+          },
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        key: GlobalSingleton().glbKey,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.location_pin),
+            label: 'Location',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: const Color(0xFF7a4cb8),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white54,
       ),
     );
   }

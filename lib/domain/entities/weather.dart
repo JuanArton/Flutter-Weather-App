@@ -1,5 +1,7 @@
 class Weather {
   Weather({
+    required this.lat,
+    required this.lon,
     required this.weather,
     required this.icon,
     required this.temp,
@@ -18,24 +20,28 @@ class Weather {
     required this.sunrise,
     required this.city,
     required this.date,
+    required this.timezone,
   });
 
-  final String weather;
-  final String icon;
-  final double temp;
-  final double feelsLike;
-  final double tempMin;
-  final double tempMax;
-  final int pressure;
-  final int humidity;
-  final int seaLevel;
-  final int grndLevel;
-  final int visibility;
-  final double windSpeed;
-  final double windGust;
-  final int cloudiness;
+  final double? lat;
+  final double? lon;
+  final String? weather;
+  final String? icon;
+  final double? temp;
+  final double? feelsLike;
+  final double? tempMin;
+  final double? tempMax;
+  final int? pressure;
+  final int? humidity;
+  final int? seaLevel;
+  final int? grndLevel;
+  final int? visibility;
+  final double? windSpeed;
+  final double? windGust;
+  final int? cloudiness;
   final int? sunset;
   final int? sunrise;
   final String? city;
   final String? date;
+  final int? timezone;
 }

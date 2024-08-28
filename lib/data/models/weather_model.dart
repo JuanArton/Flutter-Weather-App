@@ -2,6 +2,8 @@ import '../../domain/entities/weather.dart';
 
 class WeatherModel {
   WeatherModel({
+    required this.lat,
+    required this.lon,
     required this.weather,
     required this.icon,
     required this.temp,
@@ -19,29 +21,35 @@ class WeatherModel {
     required this.sunset,
     required this.sunrise,
     required this.city,
-    required this.date
+    required this.date,
+    required this.timezone,
   });
 
-  final String weather;
-  final String icon;
-  final double temp;
-  final double feelsLike;
-  final double tempMin;
-  final double tempMax;
-  final int pressure;
-  final int humidity;
-  final int seaLevel;
-  final int grndLevel;
-  final int visibility;
-  final double windSpeed;
-  final double windGust;
-  final int cloudiness;
+  final double? lat;
+  final double? lon;
+  final String? weather;
+  final String? icon;
+  final double? temp;
+  final double? feelsLike;
+  final double? tempMin;
+  final double? tempMax;
+  final int? pressure;
+  final int? humidity;
+  final int? seaLevel;
+  final int? grndLevel;
+  final int? visibility;
+  final double? windSpeed;
+  final double? windGust;
+  final int? cloudiness;
   final int? sunset;
   final int? sunrise;
   final String? city;
   final String? date;
+  final int? timezone;
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) => WeatherModel(
+    lat: json['lat'],
+    lon: json['lon'],
     weather: json["description"],
     icon: json["icon"],
     temp: json["temp"],
@@ -59,12 +67,15 @@ class WeatherModel {
     sunset: json["sunset"],
     sunrise: json["sunrise"],
     city: json["name"],
-    date: json["dt_txt"]
+    date: json["dt_txt"],
+    timezone: json["timezone"],
   );
 
   Weather toEntity() {
     return Weather(
-        weather: capitalizeFirstCharacter(weather),
+        lat: lat,
+        lon: lon,
+        weather: capitalizeFirstCharacter(weather!),
         icon: icon,
         temp: temp,
         feelsLike: feelsLike,
@@ -81,7 +92,8 @@ class WeatherModel {
         sunset: sunset,
         sunrise: sunrise,
         city: city,
-        date: date
+        date: date,
+        timezone: timezone,
     );
   }
 

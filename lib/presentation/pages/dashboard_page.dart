@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:weatherapp/common/state_enum.dart';
 import 'package:weatherapp/presentation/Widget/extra_info_widget.dart';
 import 'package:weatherapp/presentation/provider/weather_notifier.dart';
-import 'package:weatherapp/presentation/util/location_handler.dart';
+import 'package:weatherapp/presentation/util/global_singleton.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../Widget/five_day_forecast_widget.dart';
@@ -40,13 +41,20 @@ class _WeatherInfoState extends State<WeatherInfoState> {
     _controller = WebViewController();
     Future.microtask(() {
           final weatherNotifier = Provider.of<WeatherNotifier>(context, listen: false);
-          final position = LocationHandler().position;
+          Position? position;
+          if (GlobalSingleton().newPosition != null) {
+            position = GlobalSingleton().newPosition;
+            GlobalSingleton().position = GlobalSingleton().newPosition;
+          } else {
+            position = GlobalSingleton().position;
+          }
+
           weatherNotifier.fetchCurrentWeather(position!.latitude, position.longitude).then((it) {
             final weather = weatherNotifier.currentWeather;
 
             if (weather != null) {
-              final sunrise = DateTime.fromMillisecondsSinceEpoch(weather.sunrise! * 1000);
-              final sunset = DateTime.fromMillisecondsSinceEpoch(weather.sunset! * 1000);
+              final sunrise = DateTime.fromMillisecondsSinceEpoch((weather.sunrise! + weather.timezone!) * 1000);
+              final sunset = DateTime.fromMillisecondsSinceEpoch((weather.sunset! + weather.timezone!) * 1000);
               sunriseHour = DateFormat("HH:mm").format(sunrise);
 
               sunsetHour = DateFormat("HH:mm").format(sunset);
@@ -97,11 +105,11 @@ class _WeatherInfoState extends State<WeatherInfoState> {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        '${data.currentWeather!.temp.floor()}°',
+                        '${data.currentWeather?.temp?.floor()}°',
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                       Text(
-                        'Feels like ${data.currentWeather!.feelsLike.floor()}°',
+                        'Feels like ${data.currentWeather?.feelsLike?.floor()}°',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Row(

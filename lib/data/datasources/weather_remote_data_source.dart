@@ -46,9 +46,7 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
   @override
   Future<Position?> getCurrentLocation() async {
     return Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-      ),
+      desiredAccuracy: LocationAccuracy.high
     );
   }
 }

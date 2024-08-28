@@ -4,7 +4,7 @@ import 'package:weatherapp/presentation/Widget/day_card_list.dart';
 import 'package:weatherapp/presentation/Widget/forecast_card_list.dart';
 import 'package:weatherapp/presentation/provider/forecast_notifier.dart';
 import 'package:intl/intl.dart';
-import 'package:weatherapp/presentation/util/location_handler.dart';
+import 'package:weatherapp/presentation/util/global_singleton.dart';
 import '../../common/state_enum.dart';
 import '../../domain/entities/weather.dart';
 
@@ -42,7 +42,7 @@ class _ForecastState extends State<ForecastState> {
     super.initState();
     Future.microtask(() {
       final forecastNotifier = Provider.of<ForecastNotifier>(context, listen: false);
-      final position = LocationHandler().position;
+      final position = GlobalSingleton().position;
       forecastNotifier.fetchWeatherForecast(position!.latitude, position.longitude).then((_) {
         final dtTxtList = forecastNotifier.weatherForecast?.map((it) => it.date).toList();
 
