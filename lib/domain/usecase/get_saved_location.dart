@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:weatherapp/domain/entities/weather.dart';
 
 import '../../common/failure.dart';
-import '../entities/saved_location.dart';
 import '../repositories/weather_repository.dart';
 
 class GetSavedLocation {

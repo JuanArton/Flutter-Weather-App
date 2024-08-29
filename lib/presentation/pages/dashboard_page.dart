@@ -53,10 +53,13 @@ class _WeatherInfoState extends State<WeatherInfoState> {
             final weather = weatherNotifier.currentWeather;
 
             if (weather != null) {
-              final sunrise = DateTime.fromMillisecondsSinceEpoch((weather.sunrise! + weather.timezone!) * 1000);
-              final sunset = DateTime.fromMillisecondsSinceEpoch((weather.sunset! + weather.timezone!) * 1000);
-              sunriseHour = DateFormat("HH:mm").format(sunrise);
+              final sunriseRaw = DateTime.fromMillisecondsSinceEpoch((weather.sunrise! ) * 1000, isUtc: true);
+              DateTime sunrise = sunriseRaw.add(Duration(seconds: weather.timezone!));
 
+              final sunsetRaw = DateTime.fromMillisecondsSinceEpoch((weather.sunset!) * 1000);
+              DateTime sunset = sunsetRaw.add(Duration(seconds: weather.timezone!));
+
+              sunriseHour = DateFormat("HH:mm").format(sunrise);
               sunsetHour = DateFormat("HH:mm").format(sunset);
             }
           });

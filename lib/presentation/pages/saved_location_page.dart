@@ -11,8 +11,6 @@ import '../util/global_singleton.dart';
 
 
 class SavedLocationPage extends StatelessWidget {
-  static const ROUTE_NAME = '/saved_location';
-
   const SavedLocationPage({super.key});
 
   @override
@@ -65,52 +63,70 @@ class _SavedLocationState extends State<SavedLocationState> {
                 child: CircularProgressIndicator(),
               );
             } else if (data.listWeatherState == RequestState.Loaded) {
-              return SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(20.0),
+              if (data.listWeather.isEmpty) {
+                return SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height, // Provide a height constraint
-                        child: ListView.builder(
-                          itemCount: data.listWeather!.length,
-                          itemBuilder: (context, index) {
-                            final weather = data.listWeather![index];
-                            return GestureDetector(
-                              onTap: () {
-                                GlobalSingleton().newPosition = Position(
-                                  latitude: weather.lat!,
-                                  longitude: weather.lon!,
-                                  timestamp: DateTime.now(),
-                                  accuracy: 0.0,
-                                  altitude: 0.0,
-                                  heading: 0.0,
-                                  speed: 0.0,
-                                  speedAccuracy: 0.0,
-                                  altitudeAccuracy: 0.0,
-                                  headingAccuracy: 0.0,
-                                );
-                                BottomNavigationBar navigationBar = GlobalSingleton().glbKey.currentWidget as BottomNavigationBar;
-                                navigationBar.onTap!(0);
-                              },
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    width: double.infinity, // Match the width of the parent
-                                    child: SavedLocationCard(weather),
-                                  ),
-                                  const SizedBox(height: 10.0),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                      Text(
+                        "No Data",
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ],
                   ),
-                ),
-              );
+                );
+
+              } else {
+                return SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: ListView.builder(
+                            itemCount: data.listWeather.length,
+                            itemBuilder: (context, index) {
+                              final weather = data.listWeather[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  GlobalSingleton().newPosition = Position(
+                                    latitude: weather.lat!,
+                                    longitude: weather.lon!,
+                                    timestamp: DateTime.now(),
+                                    accuracy: 0.0,
+                                    altitude: 0.0,
+                                    heading: 0.0,
+                                    speed: 0.0,
+                                    speedAccuracy: 0.0,
+                                    altitudeAccuracy: 0.0,
+                                    headingAccuracy: 0.0,
+                                  );
+                                  BottomNavigationBar navigationBar = GlobalSingleton().glbKey.currentWidget as BottomNavigationBar;
+                                  navigationBar.onTap!(0);
+                                },
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: SavedLocationCard(weather),
+                                    ),
+                                    const SizedBox(height: 10.0),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
             } else {
               return Center(
                 key: const Key('error_message'),

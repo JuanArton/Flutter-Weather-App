@@ -16,8 +16,8 @@ class SavedLocationNotifier extends ChangeNotifier {
     required this.insertLocation,
   });
 
-  List<Weather>? _listWeather;
-  List<Weather>? get listWeather => _listWeather;
+  List<Weather> _listWeather = [];
+  List<Weather> get listWeather => _listWeather;
 
   RequestState _listWeatherState = RequestState.Empty;
   RequestState get listWeatherState => _listWeatherState;

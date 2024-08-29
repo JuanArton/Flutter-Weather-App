@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:provider/provider.dart';
 import 'package:weatherapp/presentation/provider/saved_location_notifier.dart';
-import 'package:weatherapp/presentation/util/global_singleton.dart';
 
 
 class NewLocationPage extends StatefulWidget {
@@ -37,6 +36,7 @@ class _NewLocationPageState extends State<NewLocationPage> {
                   minZoomLevel: 1,
                   maxZoomLevel: 24,
                   trackMyPosition: true,
+                  searchBarTextColor: Colors.black,
                   selectLocationButtonText: 'Add Location',
                   onPicked: (pickedData) async {
                     await Provider.of<SavedLocationNotifier>(
