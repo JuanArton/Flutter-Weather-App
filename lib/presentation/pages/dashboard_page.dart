@@ -56,7 +56,7 @@ class _WeatherInfoState extends State<WeatherInfoState> {
               final sunriseRaw = DateTime.fromMillisecondsSinceEpoch((weather.sunrise! ) * 1000, isUtc: true);
               DateTime sunrise = sunriseRaw.add(Duration(seconds: weather.timezone!));
 
-              final sunsetRaw = DateTime.fromMillisecondsSinceEpoch((weather.sunset!) * 1000);
+              final sunsetRaw = DateTime.fromMillisecondsSinceEpoch((weather.sunset!) * 1000, isUtc: true);
               DateTime sunset = sunsetRaw.add(Duration(seconds: weather.timezone!));
 
               sunriseHour = DateFormat("HH:mm").format(sunrise);
